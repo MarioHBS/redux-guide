@@ -1,28 +1,31 @@
-import { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useMemo, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 
 // Components
-import Cart from "../cart/index";
+import Cart from '../cart/index'
 
 // Styles
-import * as Styles from "./styles";
+import * as Styles from './styles'
 
-import { loginUser, logoutUser } from "../../redux/user/actions";
+import { loginUser, logoutUser } from '../../redux/user/actions'
 
 function Header() {
-  const [cartIsVisible, setCartIsVisible] = useState(false);
+  const [cartIsVisible, setCartIsVisible] = useState(false)
 
   const { currentUser } = useSelector((rootReducer) => rootReducer.userReducer)
+  const { products } = useSelector((root) => root.cartReducer)
   const dispatch = useDispatch()
 
-  console.log({currentUser})
+  const productsCount = useMemo(() => {
+    return products.reduce((acc, curr) => acc + curr.quantity, 0)
+  }, [products])
 
   const handleCartClick = () => {
-    setCartIsVisible(true);
-  };
+    setCartIsVisible(true)
+  }
 
   const handleLoginClick = () => {
-    dispatch(loginUser({ name: "Mário", email: "mario@henrique.com" }))
+    dispatch(loginUser({ name: 'Mário', email: 'mario@henrique.com' }))
   }
   const handleLogout = () => {
     dispatch(logoutUser())
@@ -32,15 +35,19 @@ function Header() {
     <Styles.Container>
       <Styles.Logo>Redux Shopping</Styles.Logo>
       <Styles.Buttons>
-        {currentUser ? <div onClick={handleLogout}>Sair</div> : (
+        {currentUser ? (
+          <div onClick={handleLogout}>Sair</div>
+        ) : (
           <div onClick={handleLoginClick}>Login</div>
         )}
-        <div onClick={handleCartClick}>Carrinho</div>
+        <div onClick={handleCartClick}>
+          Carrinho{productsCount > 0 ? ` (${productsCount})` : ''}
+        </div>
       </Styles.Buttons>
 
       <Cart isVisible={cartIsVisible} setIsVisible={setCartIsVisible} />
     </Styles.Container>
-  );
+  )
 }
 
-export default Header;
+export default Header
