@@ -1,14 +1,14 @@
-import { AiOutlinePlus, AiOutlineMinus, AiOutlineClose } from "react-icons/ai";
+import { AiOutlinePlus, AiOutlineMinus, AiOutlineClose } from 'react-icons/ai'
 
 // Styles
-import * as Styles from "./cart-item.styles";
+import * as Styles from './styles'
 
 const CartItem = ({ product }) => {
-  const handleRemoveClick = () => {};
+  const handleRemoveClick = () => {}
 
-  const handleIncreaseClick = () => {};
+  const handleIncreaseClick = () => {}
 
-  const handleDecreaseClick = () => {};
+  const handleDecreaseClick = () => {}
 
   return (
     <Styles.CartItemContainer>
@@ -33,14 +33,11 @@ const CartItem = ({ product }) => {
         </Styles.CartItemQuantity>
       </Styles.CartItemInfo>
 
-      <Styles.RemoveButton
-        onClick={handleRemoveClick}
-        aria-label={`Remove ${product.name}`}
-      >
+      <Styles.RemoveButton onClick={handleRemoveClick} aria-label={`Remove ${product.name}`}>
         <AiOutlineClose size={25} />
       </Styles.RemoveButton>
     </Styles.CartItemContainer>
-  );
-};
+  )
+}
 
-export default CartItem;
+export default CartItem
