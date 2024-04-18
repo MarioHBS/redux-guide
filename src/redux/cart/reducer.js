@@ -8,10 +8,23 @@ const initialState = {
 const cartReducer = (state = initialState, action) => {
   switch (action.type) {
     case CartActionTypes.ADD_PRODUCT:
-      //   initialState.products.push()
+      // verificar se já existe
+      const productAlreadyExists = state.products.some((item) => item.id === action.payload.id)
+      // se tiver, acrescentar um
+      if (productAlreadyExists) {
+        return {
+          ...state,
+          products: state.products.map((item) =>
+            item.id === action.payload.id
+              ? { ...item, quantity: item.quantity + 1 }
+              : item
+          ),
+        }
+      }
+      // senão inserir normal
       return {
-        ...initialState,
-        products: [...initialState.products, action.payload],
+        ...state,
+        products: [...state.products, {...action.payload, quantity: 1}],
       }
     default:
       return state
