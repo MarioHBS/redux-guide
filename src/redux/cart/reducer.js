@@ -26,6 +26,11 @@ const cartReducer = (state = initialState, action) => {
         ...state,
         products: [...state.products, {...action.payload, quantity: 1}],
       }
+    case CartActionTypes.RMV_PRODUCT:
+      return {
+        ...state,
+        products: state.products.filter((item) => item.id !== action.payload)
+      }
     default:
       return state
   }
