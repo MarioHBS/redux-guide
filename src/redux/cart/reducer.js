@@ -13,12 +13,6 @@ const incrementProduct = (state, pid) => ({
       : item
   ),
 })
-const removeProduct = (state, pid) => {
-  return {
-    ...state,
-    products: state.products.filter((item) => item.id !== pid)
-  }
-}
 
 const cartReducer = (state = initialState, action) => {
   switch (action.type) {
@@ -35,19 +29,20 @@ const cartReducer = (state = initialState, action) => {
         products: [...state.products, {...action.payload, quantity: 1}],
       }
     case CartActionTypes.RMV_PRODUCT:
-      return removeProduct(state, action.payload)
+      return {
+        ...state,
+        products: state.products.filter((item) => item.id !== action.payload)
+      }
     case CartActionTypes.INC_PRODUCT:
       return incrementProduct(state, action.payload)
     case CartActionTypes.DEC_PRODUCT:
-      const updatedProducts = [...state.products]
-      const prodIdx = state.products.findIndex((item) => item.id === action.payload)
-      if (updatedProducts[prodIdx].quantity === 1) return removeProduct(state, action.payload)
-
-      updatedProducts[prodIdx].quantity--
-
       return {
         ...state,
-        products: updatedProducts
+        products: state.products.map((item) =>
+          item.id === action.payload
+            ? {...item, quantity: item.quantity - 1}
+            : item
+        ).filter((item) => item.quantity > 0),
       }
     default:
       return state
