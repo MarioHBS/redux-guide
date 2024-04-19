@@ -5,6 +5,14 @@ const initialState = {
   productsTotalPrice: 0,
 }
 
+const incrementProduct = (state, pid) => ({
+  ...state,
+  products: state.products.map((item) =>
+    item.id === pid
+      ? { ...item, quantity: item.quantity + 1 }
+      : item
+  ),
+})
 const removeProduct = (state, pid) => {
   return {
     ...state,
@@ -19,14 +27,7 @@ const cartReducer = (state = initialState, action) => {
       const productAlreadyExists = state.products.some((item) => item.id === action.payload.id)
       // se tiver, acrescentar um
       if (productAlreadyExists) {
-        return {
-          ...state,
-          products: state.products.map((item) =>
-            item.id === action.payload.id
-              ? { ...item, quantity: item.quantity + 1 }
-              : item
-          ),
-        }
+        return incrementProduct(state, action.payload.id)
       }
       // senão inserir normal
       return {
@@ -36,27 +37,17 @@ const cartReducer = (state = initialState, action) => {
     case CartActionTypes.RMV_PRODUCT:
       return removeProduct(state, action.payload)
     case CartActionTypes.INC_PRODUCT:
-      return {
-        ...state,
-        products: state.products.map((item) =>
-          item.id === action.payload
-            ? { ...item, quantity: item.quantity + 1}
-            : item
-        )
-      }
+      return incrementProduct(state, action.payload)
     case CartActionTypes.DEC_PRODUCT:
-      const decreasedProduct = state.products.find((item) => item.id === action.payload)
-      if (decreasedProduct.quantity === 1) {
-        return removeProduct(state, action.payload)
-      }
+      const updatedProducts = [...state.products]
+      const prodIdx = state.products.findIndex((item) => item.id === action.payload)
+      if (updatedProducts[prodIdx].quantity === 1) return removeProduct(state, action.payload)
+
+      updatedProducts[prodIdx].quantity--
 
       return {
         ...state,
-        products: state.products.map((item) =>
-          item.id === action.payload
-            ? { ...item, quantity: item.quantity - 1}
-            : item
-        )
+        products: updatedProducts
       }
     default:
       return state
