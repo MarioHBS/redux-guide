@@ -2,7 +2,6 @@ import CartActionTypes from './action-types'
 
 const initialState = {
   products: [],
-  productsTotalPrice: 0,
 }
 
 const incrementProduct = (state, pid) => ({
