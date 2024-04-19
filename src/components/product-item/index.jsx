@@ -8,13 +8,11 @@ import * as Styles from './styles'
 import { useDispatch } from 'react-redux'
 
 // Utilities
-import { addProductToCart } from '../../redux/cart/actions'
+import { addProduct } from '../../redux/cart/slice'
 
 const ProductItem = ({ product }) => {
-  const dispatech = useDispatch()
-  const handleProductClick = () => {
-    dispatech(addProductToCart(product))
-  }
+  const dispatch = useDispatch()
+  const handleProductClick = () => dispatch(addProduct(product))
 
   return (
     <Styles.ProductContainer>
